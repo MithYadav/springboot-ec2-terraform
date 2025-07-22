@@ -24,7 +24,7 @@ jobs:
           pwd
           echo "Files here:"
           ls -la
-          cd springboot-ec2-terraform
+          cd spring_github_copilot
           ./mvnw clean package -DskipTests
 
       - name: Upload JAR to S3
