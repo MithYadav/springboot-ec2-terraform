@@ -32,13 +32,11 @@ jobs:
 
       - name: Upload JAR to S3
         run: |
-         echo "Listing contents of target directory..."
-         ls -lh spring_github_copilot/target
-         aws s3 cp spring_github_copilot/target/spring_github_copilot-1.0-SNAPSHOT.jar s3://${AWS_S3_BUCKET}/spring_github_copilot-1.0-SNAPSHOT.jar --acl private
-        env:
-          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_DIR: spring_github_copilot/target/
+         echo "Uploading JAR to S3..."
+         aws s3 cp spring_github_copilot/target/spring_github_copilot-1.0-SNAPSHOT.jar s3://$AWS_S3_BUCKET/spring_github_copilot-1.0-SNAPSHOT.jar --acl private
+       env:
+        AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
          
