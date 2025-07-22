@@ -25,6 +25,9 @@ jobs:
           echo "Files here:"
           ls -la
           cd spring_github_copilot
+          echo "Inside spring_github_copilot:"
+          pwd
+          ls -la
           ./mvnw clean package -DskipTests
 
       - name: Upload JAR to S3
