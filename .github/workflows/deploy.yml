@@ -20,6 +20,8 @@ jobs:
 
       - name: Build Spring Boot App
         run: |
+          echo "Current directory before cd:"
+          pwd
           cd springboot-ec2-terraform
           ./mvnw clean package -DskipTests
 
