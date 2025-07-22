@@ -28,7 +28,7 @@ jobs:
           echo "Inside spring_github_copilot:"
           pwd
           ls -la
-          ./mvnw clean package -DskipTests
+          ./mvn clean package -DskipTests
 
       - name: Upload JAR to S3
         uses: jakejarvis/s3-sync-action@master
