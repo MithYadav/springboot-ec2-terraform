@@ -31,7 +31,7 @@ jobs:
           mvn clean package -DskipTests
 
       - name: Upload JAR to S3
-        uses: jakejarvis/s3-sync-action@main
+        uses: jakejarvis/s3-sync-action@v0.5.1
         with:
           args: --acl private --follow-symlinks
         env:
