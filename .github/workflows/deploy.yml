@@ -32,7 +32,7 @@ jobs:
 
       - name: Upload JAR to S3
         run: |
-         echo "Checking contents of JAR output folder:"
+         echo "Checking contents of JAR folder:"
          ls -la spring_github_copilot/target
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
