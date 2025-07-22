@@ -35,7 +35,7 @@ jobs:
          echo "Uploading JAR to S3..."
          ls -la
          echo "command printed"
-        #aws s3 cp spring_github_copilot/target/spring_github_copilot-1.0-SNAPSHOT.jar s3://$AWS_S3_BUCKET/spring_github_copilot-1.0-SNAPSHOT.jar --acl private
+         aws s3 cp "spring_github_copilot/target/spring_github_copilot-1.0-SNAPSHOT.jar s3://$AWS_S3_BUCKET/spring_github_copilot-1.0-SNAPSHOT.jar" --acl private
         env:
          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
