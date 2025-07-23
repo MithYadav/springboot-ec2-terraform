@@ -29,7 +29,8 @@ jobs:
           pwd
           ls -la
           mvn clean package -DskipTests
-
+      - name: Verify S3 access
+        run: aws s3 ls s3://$AWS_S3_BUCKET/ --region $AWS_REGION
       - name: Upload JAR to S3
         run: |
           echo "Uploading JAR to S3..."
