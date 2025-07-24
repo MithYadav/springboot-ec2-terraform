@@ -52,6 +52,10 @@ jobs:
         run: |
          echo "${{ secrets.EC2_KEY }}" > private_key.pem
          chmod 600 private_key.pem
+      - name: Debug key format (head only)
+        run: |
+          head -n 5 private_key.pem
+
       - name: Test SSH connection
         run: |
           ssh -v -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} exit
