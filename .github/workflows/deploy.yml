@@ -1,0 +1,71 @@
+name: Build and Deploy Spring Boot App
+
+on:
+  push:
+    branches: [ "main" ]  # Change to your branch if needed
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build Spring Boot App
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files here:"
+          ls -la
+          cd spring_github_copilot
+          echo "Inside spring_github_copilot:"
+          pwd
+          ls -la
+          mvn clean package -DskipTests
+
+      - name: Verify S3 access
+        run: aws s3 ls s3://$AWS_S3_BUCKET/ --region $AWS_REGION
+        env:
+          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Upload JAR to S3
+        run: |
+          echo ".....Uploading JAR to S3..."
+          ls -la spring_github_copilot/target
+          aws s3 cp spring_github_copilot/target/spring_github_copilot-1.0-SNAPSHOT.jar s3://$AWS_S3_BUCKET/spring_github_copilot-1.0-SNAPSHOT.jar --acl private
+        env:
+          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.EC2_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Debug key format (head only)
+        run: head -n 5 private_key.pem
+
+      - name: Test SSH connection
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} exit
+
+      - name: SSH into EC2 and restart Spring Boot app
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            sudo pkill -f spring_github_copilot-1.0-SNAPSHOT.jar || true
+            aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/spring_github_copilot-1.0-SNAPSHOT.jar spring_github_copilot.jar
+            nohup java -jar spring_github_copilot.jar > app.log 2>&1 &
+          EOF
+
