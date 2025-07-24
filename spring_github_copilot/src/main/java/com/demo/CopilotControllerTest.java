@@ -19,15 +19,11 @@ public class CopilotControllerTest {
     public ResponseEntity<String> deployec2() {
         return new ResponseEntity<>("Deployed Spring Boot Web app on EC2..",HttpStatus.OK);
     }
-    @GetMapping("/cd")
-    public ResponseEntity<String> deployec2CI_CD() {
-
-        return new ResponseEntity<>("deployed springboot app on EC2 using CI/CD pipeline",HttpStatus.OK);
-    }
+ 
     @GetMapping("/pipeline")
     public ResponseEntity<String> deployec2CI_CD_pipeline() {
 
         return new ResponseEntity<>("Welcome to CI/CD pipeline deployment!Great Work",HttpStatus.OK);
     }
 
-}
+ } 
