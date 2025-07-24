@@ -65,7 +65,14 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
             echo "Killing old Java apps using port..."
-            sudo pkill -f spring_github_copilot-1.0-SNAPSHOT.jar || true
+            PID=$(sudo lsof -t -i:8080 || true)
+            if [ ! -z "$PID" ]; then
+              sudo kill -9 $PID
+              echo "✅ Killed process using port 8080 (PID: $PID)"
+            else 
+              echo "ℹ️ No process was using port 8080."
+            fi
+           # sudo pkill -f spring_github_copilot-1.0-SNAPSHOT.jar || true
             sleep 5
             echo "Downloading latest JAR from S3..."
             aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/spring_github_copilot-1.0-SNAPSHOT.jar spring_github_copilot.jar

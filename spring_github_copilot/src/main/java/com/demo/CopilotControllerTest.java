@@ -25,5 +25,10 @@ public class CopilotControllerTest {
 
         return new ResponseEntity<>("Welcome to CI/CD pipeline deployment!Great Work",HttpStatus.OK);
     }
+    @GetMapping("/stop")
+        public ResponseEntity<String> stopport() {
+
+            return new ResponseEntity<>("Port is stopped",HttpStatus.OK);
+     }
 
  } 
