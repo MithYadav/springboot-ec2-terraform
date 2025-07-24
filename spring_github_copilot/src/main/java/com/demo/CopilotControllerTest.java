@@ -1,4 +1,4 @@
-ipackage com.demo;
+package com.demo;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
