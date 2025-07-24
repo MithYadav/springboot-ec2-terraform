@@ -71,6 +71,6 @@ jobs:
             aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/spring_github_copilot-1.0-SNAPSHOT.jar spring_github_copilot.jar
             echo "Starting Spring Boot app..."
             nohup java -jar spring_github_copilot.jar > app.log 2>&1 &
-            echo "deployed"
+            echo "deployed successfully!:"
           EOF
 
